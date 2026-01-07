@@ -51,14 +51,7 @@ class TimeSlotServiceTest {
         // Arrange
         when(timeSlotRepository.findByMethodAndDate(DeliveryMethod.DRIVE, tomorrow))
                 .thenReturn(Collections.emptyList());
-        when(timeSlotRepository.saveAll(any()))
-                .thenAnswer(invocation -> {
-                    List<TimeSlot> slots = invocation.getArgument(0);
-                    for (int i = 0; i < slots.size(); i++) {
-                        slots.get(i).setId((long) (i + 1));
-                    }
-                    return slots;
-                });
+        when(timeSlotRepository.saveAll(any())).thenAnswer(i -> i.getArgument(0));
 
         // Act
         List<TimeSlotDTO> slots = timeSlotService.getSlots(DeliveryMethod.DRIVE, tomorrow);
@@ -79,14 +72,7 @@ class TimeSlotServiceTest {
         // Arrange
         when(timeSlotRepository.findByMethodAndDate(DeliveryMethod.DELIVERY, tomorrow))
                 .thenReturn(Collections.emptyList());
-        when(timeSlotRepository.saveAll(any()))
-                .thenAnswer(invocation -> {
-                    List<TimeSlot> slots = invocation.getArgument(0);
-                    for (int i = 0; i < slots.size(); i++) {
-                        slots.get(i).setId((long) (i + 1));
-                    }
-                    return slots;
-                });
+        when(timeSlotRepository.saveAll(any())).thenAnswer(i -> i.getArgument(0));
 
         // Act
         List<TimeSlotDTO> slots = timeSlotService.getSlots(DeliveryMethod.DELIVERY, tomorrow);
@@ -102,14 +88,7 @@ class TimeSlotServiceTest {
         // Arrange
         when(timeSlotRepository.findByMethodAndDate(DeliveryMethod.DELIVERY_TODAY, today))
                 .thenReturn(Collections.emptyList());
-        when(timeSlotRepository.saveAll(any()))
-                .thenAnswer(invocation -> {
-                    List<TimeSlot> slots = invocation.getArgument(0);
-                    for (int i = 0; i < slots.size(); i++) {
-                        slots.get(i).setId((long) (i + 1));
-                    }
-                    return slots;
-                });
+        when(timeSlotRepository.saveAll(any())).thenAnswer(i -> i.getArgument(0));
 
         // Act
         List<TimeSlotDTO> slots = timeSlotService.getSlots(DeliveryMethod.DELIVERY_TODAY, today);
@@ -161,8 +140,8 @@ class TimeSlotServiceTest {
     void getSlots_ExistingSlots_ReturnsWithoutCreating() {
         // Arrange
         List<TimeSlot> existingSlots = List.of(
-                createSlot(1L, DeliveryMethod.DRIVE, tomorrow, LocalTime.of(9, 0), LocalTime.of(11, 0)),
-                createSlot(2L, DeliveryMethod.DRIVE, tomorrow, LocalTime.of(11, 0), LocalTime.of(13, 0))
+                new TimeSlot(DeliveryMethod.DRIVE, tomorrow, LocalTime.of(9, 0), LocalTime.of(11, 0)),
+                new TimeSlot(DeliveryMethod.DRIVE, tomorrow, LocalTime.of(11, 0), LocalTime.of(13, 0))
         );
         when(timeSlotRepository.findByMethodAndDate(DeliveryMethod.DRIVE, tomorrow))
                 .thenReturn(existingSlots);
@@ -185,10 +164,5 @@ class TimeSlotServiceTest {
         assertEquals(0, timeSlotService.getSlotDefinitions(DeliveryMethod.DELIVERY_ASAP).size());
     }
 
-    private TimeSlot createSlot(Long id, DeliveryMethod method, LocalDate date, 
-                                 LocalTime start, LocalTime end) {
-        TimeSlot slot = new TimeSlot(method, date, start, end);
-        slot.setId(id);
-        return slot;
-    }
+
 }

@@ -7,7 +7,7 @@ import com.delivery.entity.Reservation;
 
 import com.delivery.entity.TimeSlot;
 import com.delivery.exception.InvalidRequestException;
-import com.delivery.exception.InvalidRequestException;
+
 import com.delivery.repository.ReservationRepository;
 import com.delivery.repository.TimeSlotRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
+
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -47,7 +47,7 @@ class ReservationServiceTest {
 
     private LocalDate today;
     private TimeSlot availableSlot;
-    private TimeSlot reservedSlot;
+
     private ReservationRequest validRequest;
 
     @BeforeEach
@@ -56,8 +56,7 @@ class ReservationServiceTest {
         
         availableSlot = new TimeSlot(DeliveryMethod.DRIVE, today, LocalTime.of(9, 0), LocalTime.of(11, 0));
         availableSlot.setId(1L);
-        reservedSlot = new TimeSlot(DeliveryMethod.DRIVE, today, LocalTime.of(11, 0), LocalTime.of(13, 0));
-        reservedSlot.setId(2L);
+
 
         validRequest = new ReservationRequest();
         validRequest.setMethod(DeliveryMethod.DRIVE);
@@ -71,7 +70,6 @@ class ReservationServiceTest {
         // Arrange
         doNothing().when(timeSlotService).validateMethodAndDate(any(), any());
         when(timeSlotRepository.findById(1L)).thenReturn(Optional.of(availableSlot));
-        // when(timeSlotRepository.save(any())).thenReturn(availableSlot); // removed save call
         when(reservationRepository.save(any())).thenAnswer(invocation -> {
             Reservation r = invocation.getArgument(0);
             r.setId(100L);
@@ -87,7 +85,6 @@ class ReservationServiceTest {
         assertEquals(1L, result.getSlotId());
         assertEquals(DeliveryMethod.DRIVE, result.getMethod());
         
-        // verify(timeSlotRepository).save(any()); // No longer saving timeSlot
         verify(reservationRepository).save(any());
     }
 
