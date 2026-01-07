@@ -23,7 +23,6 @@ export interface ReservationRequest {
     method: string;
     date: string;
     slotId: number;
-    customerId: string;
 }
 
 export interface Reservation {
@@ -33,7 +32,6 @@ export interface Reservation {
     date: string;
     startTime: string;
     endTime: string;
-    customerId: string;
     createdAt: string;
 }
 

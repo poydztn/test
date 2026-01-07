@@ -32,12 +32,7 @@ public class DeliveryMethodController {
     }
 
     private String formatMethodName(DeliveryMethod method) {
-        return switch (method) {
-            case DRIVE -> "Drive (Store Pickup)";
-            case DELIVERY -> "Standard Delivery";
-            case DELIVERY_TODAY -> "Today Delivery";
-            case DELIVERY_ASAP -> "ASAP Delivery";
-        };
+        return method.name();
     }
 
     private String getMethodDescription(DeliveryMethod method) {

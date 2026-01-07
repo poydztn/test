@@ -10,11 +10,6 @@ import java.util.List;
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
     /**
-     * Find all reservations by customer ID.
-     */
-    List<Reservation> findByCustomerId(String customerId);
-
-    /**
      * Check if a reservation exists for a given time slot.
      */
     boolean existsByTimeSlotId(Long timeSlotId);

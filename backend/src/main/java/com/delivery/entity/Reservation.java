@@ -18,18 +18,14 @@ public class Reservation {
     @JoinColumn(name = "time_slot_id", nullable = false)
     private TimeSlot timeSlot;
 
-    @Column(name = "customer_id", nullable = false)
-    private String customerId;
-
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     // Default constructor for JPA
     public Reservation() {}
 
-    public Reservation(TimeSlot timeSlot, String customerId) {
+    public Reservation(TimeSlot timeSlot) {
         this.timeSlot = timeSlot;
-        this.customerId = customerId;
         this.createdAt = LocalDateTime.now();
     }
 
@@ -50,13 +46,7 @@ public class Reservation {
         this.timeSlot = timeSlot;
     }
 
-    public String getCustomerId() {
-        return customerId;
-    }
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;

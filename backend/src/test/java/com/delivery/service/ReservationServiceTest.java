@@ -66,7 +66,6 @@ class ReservationServiceTest {
         validRequest.setMethod(DeliveryMethod.DRIVE);
         validRequest.setDate(today);
         validRequest.setSlotId(1L);
-        validRequest.setCustomerId("CUST-001");
     }
 
     @Test
@@ -89,7 +88,6 @@ class ReservationServiceTest {
         assertNotNull(result);
         assertEquals(100L, result.getId());
         assertEquals(1L, result.getSlotId());
-        assertEquals("CUST-001", result.getCustomerId());
         assertEquals(DeliveryMethod.DRIVE, result.getMethod());
         
         verify(timeSlotRepository).save(any());
@@ -164,7 +162,7 @@ class ReservationServiceTest {
     @DisplayName("Should get reservation by ID")
     void getReservation_ValidId_ReturnsReservation() {
         // Arrange
-        Reservation reservation = new Reservation(availableSlot, "CUST-001");
+        Reservation reservation = new Reservation(availableSlot);
         reservation.setId(100L);
         when(reservationRepository.findById(100L)).thenReturn(Optional.of(reservation));
 
@@ -173,7 +171,6 @@ class ReservationServiceTest {
 
         // Assert
         assertEquals(100L, result.getId());
-        assertEquals("CUST-001", result.getCustomerId());
     }
 
     @Test

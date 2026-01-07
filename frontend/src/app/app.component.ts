@@ -95,20 +95,11 @@ import {
           <p class="text-muted">No slots available for this date. Please try another date.</p>
         </div>
 
-        <!-- Customer ID & Reserve Button -->
+        <!-- Reserve Button -->
         <div *ngIf="selectedSlot" class="mt-4">
-          <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-4">
-              <label class="form-label fw-semibold">Your Customer ID</label>
-              <input type="text" 
-                     class="form-control form-control-lg mb-3"
-                     [(ngModel)]="customerId"
-                     placeholder="Enter your customer ID">
-            </div>
-          </div>
           <div class="text-center">
             <button class="btn btn-primary-gradient btn-lg" 
-                    [disabled]="!customerId || reserving"
+                    [disabled]="reserving"
                     (click)="makeReservation()">
               <span *ngIf="!reserving">Reserve This Slot</span>
               <span *ngIf="reserving">Reserving...</span>
@@ -146,7 +137,6 @@ export class AppComponent implements OnInit {
   selectedMethod: DeliveryMethod | null = null;
   selectedDate: string = '';
   selectedSlot: TimeSlot | null = null;
-  customerId: string = '';
   reservation: Reservation | null = null;
 
   // Loading states
@@ -203,7 +193,6 @@ export class AppComponent implements OnInit {
     // Reset slot selection when method changes
     this.selectedSlot = null;
     this.timeSlots = [];
-    this.customerId = '';
 
     // For DELIVERY_TODAY and ASAP, force today's date
     if (this.selectedMethod.code === 'DELIVERY_TODAY' || this.selectedMethod.code === 'DELIVERY_ASAP') {
@@ -249,7 +238,7 @@ export class AppComponent implements OnInit {
   }
 
   makeReservation(): void {
-    if (!this.selectedMethod || !this.selectedSlot || !this.customerId) return;
+    if (!this.selectedMethod || !this.selectedSlot) return;
 
     this.reserving = true;
     this.clearError();
@@ -257,8 +246,7 @@ export class AppComponent implements OnInit {
     const request: ReservationRequest = {
       method: this.selectedMethod.code,
       date: this.selectedDate,
-      slotId: this.selectedSlot.id,
-      customerId: this.customerId
+      slotId: this.selectedSlot.id
     };
 
     this.deliveryService.createReservation(request).subscribe({
@@ -280,7 +268,6 @@ export class AppComponent implements OnInit {
   startOver(): void {
     this.selectedMethod = null;
     this.selectedSlot = null;
-    this.customerId = '';
     this.reservation = null;
     this.timeSlots = [];
     this.setDateConstraints();

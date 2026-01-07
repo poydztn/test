@@ -20,8 +20,7 @@ public class ReservationRequest {
     @NotNull(message = "Slot ID is required")
     private Long slotId;
 
-    @NotBlank(message = "Customer ID is required")
-    private String customerId;
+
 
     // Getters and Setters
     public DeliveryMethod getMethod() { return method; }
@@ -33,6 +32,4 @@ public class ReservationRequest {
     public Long getSlotId() { return slotId; }
     public void setSlotId(Long slotId) { this.slotId = slotId; }
 
-    public String getCustomerId() { return customerId; }
-    public void setCustomerId(String customerId) { this.customerId = customerId; }
 }

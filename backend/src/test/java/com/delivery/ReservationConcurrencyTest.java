@@ -64,7 +64,6 @@ class ReservationConcurrencyTest {
 
         // Act - Launch concurrent reservation attempts
         for (int i = 0; i < numberOfThreads; i++) {
-            final String customerId = "CUST-" + i;
             executor.submit(() -> {
                 try {
                     startLatch.await(); // Wait for all threads to be ready
@@ -73,7 +72,6 @@ class ReservationConcurrencyTest {
                     request.setMethod(DeliveryMethod.DRIVE);
                     request.setDate(tomorrow);
                     request.setSlotId(slotId);
-                    request.setCustomerId(customerId);
 
                     MvcResult result = mockMvc.perform(post("/api/reservations")
                             .contentType(MediaType.APPLICATION_JSON)

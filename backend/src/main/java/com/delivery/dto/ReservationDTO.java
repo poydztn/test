@@ -17,21 +17,18 @@ public class ReservationDTO {
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
-    private String customerId;
     private LocalDateTime createdAt;
 
     public ReservationDTO() {}
 
     public ReservationDTO(Long id, Long slotId, DeliveryMethod method, LocalDate date,
-                          LocalTime startTime, LocalTime endTime, String customerId, 
-                          LocalDateTime createdAt) {
+                          LocalTime startTime, LocalTime endTime, LocalDateTime createdAt) {
         this.id = id;
         this.slotId = slotId;
         this.method = method;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.customerId = customerId;
         this.createdAt = createdAt;
     }
 
@@ -54,8 +51,7 @@ public class ReservationDTO {
     public LocalTime getEndTime() { return endTime; }
     public void setEndTime(LocalTime endTime) { this.endTime = endTime; }
 
-    public String getCustomerId() { return customerId; }
-    public void setCustomerId(String customerId) { this.customerId = customerId; }
+
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

@@ -61,7 +61,7 @@ public class ReservationService {
             timeSlotRepository.save(slot);
 
             // Create reservation
-            Reservation reservation = new Reservation(slot, request.getCustomerId());
+            Reservation reservation = new Reservation(slot);
             reservation = reservationRepository.save(reservation);
 
             return toDTO(reservation);
@@ -93,7 +93,6 @@ public class ReservationService {
                 slot.getDate(),
                 slot.getStartTime(),
                 slot.getEndTime(),
-                reservation.getCustomerId(),
                 reservation.getCreatedAt()
         );
     }
