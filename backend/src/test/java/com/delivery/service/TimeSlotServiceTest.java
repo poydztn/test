@@ -2,7 +2,7 @@ package com.delivery.service;
 
 import com.delivery.dto.TimeSlotDTO;
 import com.delivery.entity.DeliveryMethod;
-import com.delivery.entity.SlotStatus;
+
 import com.delivery.entity.TimeSlot;
 import com.delivery.exception.InvalidRequestException;
 import com.delivery.repository.TimeSlotRepository;
@@ -93,7 +93,7 @@ class TimeSlotServiceTest {
 
         // Assert
         assertEquals(4, slots.size());
-        assertEquals(SlotStatus.AVAILABLE, slots.get(0).getStatus());
+
     }
 
     @Test

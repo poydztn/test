@@ -33,10 +33,6 @@ public class TimeSlot {
     @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private SlotStatus status = SlotStatus.AVAILABLE;
-
     @Version
     private Long version;
 
@@ -48,7 +44,6 @@ public class TimeSlot {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.status = SlotStatus.AVAILABLE;
     }
 
     // Getters and Setters
@@ -90,14 +85,6 @@ public class TimeSlot {
 
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
-    }
-
-    public SlotStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(SlotStatus status) {
-        this.status = status;
     }
 
     public Long getVersion() {

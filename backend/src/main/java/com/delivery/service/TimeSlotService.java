@@ -2,7 +2,7 @@ package com.delivery.service;
 
 import com.delivery.dto.TimeSlotDTO;
 import com.delivery.entity.DeliveryMethod;
-import com.delivery.entity.SlotStatus;
+
 import com.delivery.entity.TimeSlot;
 import com.delivery.exception.InvalidRequestException;
 import com.delivery.repository.TimeSlotRepository;
@@ -155,8 +155,7 @@ public class TimeSlotService {
                 slot.getMethod(),
                 slot.getDate(),
                 slot.getStartTime(),
-                slot.getEndTime(),
-                slot.getStatus()
+                slot.getEndTime()
         );
     }
 }

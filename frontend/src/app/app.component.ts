@@ -41,12 +41,9 @@ import {
                     [compareWith]="compareMethod">
               <option [ngValue]="null" disabled>-- Select a delivery method --</option>
               <option *ngFor="let method of deliveryMethods" [ngValue]="method">
-                {{ method.name }}
+                {{ method }}
               </option>
             </select>
-            <div *ngIf="selectedMethod" class="text-muted small mt-2">
-              {{ selectedMethod.description }}
-            </div>
           </div>
         </div>
       </div>
@@ -54,10 +51,10 @@ import {
       <!-- Step 2: Slot Selection (Visible when method selected) -->
       <div *ngIf="selectedMethod" class="mb-5">
         <h2 class="h4 mb-4">Step 2: Choose Your Time Slot</h2>
-        <p class="text-muted mb-3">Selected method: {{ selectedMethod?.name }}</p>
+        <p class="text-muted mb-3">Selected method: {{ selectedMethod }}</p>
 
         <!-- Date Picker (only for DRIVE and DELIVERY methods) -->
-        <div *ngIf="selectedMethod.code === 'DRIVE' || selectedMethod.code === 'DELIVERY'" class="mb-4">
+        <div *ngIf="selectedMethod === 'DRIVE' || selectedMethod === 'DELIVERY'" class="mb-4">
           <div class="row justify-content-center">
             <div class="col-md-6 col-lg-4">
               <label class="form-label fw-semibold">Select Date</label>
@@ -195,7 +192,7 @@ export class AppComponent implements OnInit {
     this.timeSlots = [];
 
     // For DELIVERY_TODAY and ASAP, force today's date
-    if (this.selectedMethod.code === 'DELIVERY_TODAY' || this.selectedMethod.code === 'DELIVERY_ASAP') {
+    if (this.selectedMethod === 'DELIVERY_TODAY' || this.selectedMethod === 'DELIVERY_ASAP') {
       this.selectedDate = this.minDate;
     }
 
@@ -204,7 +201,7 @@ export class AppComponent implements OnInit {
   }
 
   compareMethod(m1: DeliveryMethod | null, m2: DeliveryMethod | null): boolean {
-    return m1?.code === m2?.code;
+    return m1 === m2;
   }
 
 
@@ -215,7 +212,7 @@ export class AppComponent implements OnInit {
     this.loadingSlots = true;
     this.selectedSlot = null;
 
-    this.deliveryService.getTimeSlots(this.selectedMethod.code, this.selectedDate).subscribe({
+    this.deliveryService.getTimeSlots(this.selectedMethod, this.selectedDate).subscribe({
       next: (slots) => {
         this.timeSlots = slots;
         this.loadingSlots = false;
@@ -244,7 +241,7 @@ export class AppComponent implements OnInit {
     this.clearError();
 
     const request: ReservationRequest = {
-      method: this.selectedMethod.code,
+      method: this.selectedMethod,
       date: this.selectedDate,
       slotId: this.selectedSlot.id
     };
@@ -278,7 +275,7 @@ export class AppComponent implements OnInit {
   }
 
   isAsapMethod(): boolean {
-    return this.selectedMethod?.code === 'DELIVERY_ASAP';
+    return this.selectedMethod === 'DELIVERY_ASAP';
   }
 
 

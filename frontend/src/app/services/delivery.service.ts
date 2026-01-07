@@ -4,11 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
-export interface DeliveryMethod {
-    code: string;
-    name: string;
-    description: string;
-}
+export type DeliveryMethod = string;
 
 export interface TimeSlot {
     id: number;
@@ -16,7 +12,6 @@ export interface TimeSlot {
     date: string;
     startTime: string;
     endTime: string;
-    status: 'AVAILABLE' | 'RESERVED';
 }
 
 export interface ReservationRequest {
@@ -32,7 +27,6 @@ export interface Reservation {
     date: string;
     startTime: string;
     endTime: string;
-    createdAt: string;
 }
 
 export interface ApiError {

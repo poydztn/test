@@ -2,7 +2,7 @@ package com.delivery.repository;
 
 import com.delivery.entity.DeliveryMethod;
 import com.delivery.entity.TimeSlot;
-import com.delivery.entity.SlotStatus;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
@@ -18,14 +18,7 @@ import java.util.Optional;
 @Repository
 public interface TimeSlotRepository extends JpaRepository<TimeSlot, Long> {
 
-    /**
-     * Find a time slot by ID with pessimistic locking.
-     * This ensures only one transaction can read and modify the slot at a time,
-     * preventing double-booking issues.
-     */
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT t FROM TimeSlot t WHERE t.id = :id")
-    Optional<TimeSlot> findByIdWithLock(@Param("id") Long id);
+
 
     /**
      * Find all slots for a given method and date.

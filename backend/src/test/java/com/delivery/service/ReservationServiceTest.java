@@ -4,10 +4,10 @@ import com.delivery.dto.ReservationDTO;
 import com.delivery.dto.ReservationRequest;
 import com.delivery.entity.DeliveryMethod;
 import com.delivery.entity.Reservation;
-import com.delivery.entity.SlotStatus;
+
 import com.delivery.entity.TimeSlot;
 import com.delivery.exception.InvalidRequestException;
-import com.delivery.exception.SlotAlreadyReservedException;
+import com.delivery.exception.InvalidRequestException;
 import com.delivery.repository.ReservationRepository;
 import com.delivery.repository.TimeSlotRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,11 +56,8 @@ class ReservationServiceTest {
         
         availableSlot = new TimeSlot(DeliveryMethod.DRIVE, today, LocalTime.of(9, 0), LocalTime.of(11, 0));
         availableSlot.setId(1L);
-        availableSlot.setStatus(SlotStatus.AVAILABLE);
-
         reservedSlot = new TimeSlot(DeliveryMethod.DRIVE, today, LocalTime.of(11, 0), LocalTime.of(13, 0));
         reservedSlot.setId(2L);
-        reservedSlot.setStatus(SlotStatus.RESERVED);
 
         validRequest = new ReservationRequest();
         validRequest.setMethod(DeliveryMethod.DRIVE);
@@ -73,8 +70,8 @@ class ReservationServiceTest {
     void createReservation_ValidRequest_ReturnsReservation() {
         // Arrange
         doNothing().when(timeSlotService).validateMethodAndDate(any(), any());
-        when(timeSlotRepository.findByIdWithLock(1L)).thenReturn(Optional.of(availableSlot));
-        when(timeSlotRepository.save(any())).thenReturn(availableSlot);
+        when(timeSlotRepository.findById(1L)).thenReturn(Optional.of(availableSlot));
+        // when(timeSlotRepository.save(any())).thenReturn(availableSlot); // removed save call
         when(reservationRepository.save(any())).thenAnswer(invocation -> {
             Reservation r = invocation.getArgument(0);
             r.setId(100L);
@@ -90,33 +87,18 @@ class ReservationServiceTest {
         assertEquals(1L, result.getSlotId());
         assertEquals(DeliveryMethod.DRIVE, result.getMethod());
         
-        verify(timeSlotRepository).save(any());
+        // verify(timeSlotRepository).save(any()); // No longer saving timeSlot
         verify(reservationRepository).save(any());
     }
 
-    @Test
-    @DisplayName("Should throw exception when slot is already reserved")
-    void createReservation_AlreadyReserved_ThrowsException() {
-        // Arrange
-        validRequest.setSlotId(2L);
-        doNothing().when(timeSlotService).validateMethodAndDate(any(), any());
-        when(timeSlotRepository.findByIdWithLock(2L)).thenReturn(Optional.of(reservedSlot));
 
-        // Act & Assert
-        assertThrows(
-                SlotAlreadyReservedException.class,
-                () -> reservationService.createReservation(validRequest)
-        );
-        
-        verify(reservationRepository, never()).save(any());
-    }
 
     @Test
     @DisplayName("Should throw exception when slot not found")
     void createReservation_SlotNotFound_ThrowsException() {
         // Arrange
         doNothing().when(timeSlotService).validateMethodAndDate(any(), any());
-        when(timeSlotRepository.findByIdWithLock(1L)).thenReturn(Optional.empty());
+        when(timeSlotRepository.findById(1L)).thenReturn(Optional.empty());
 
         // Act & Assert
         InvalidRequestException exception = assertThrows(
@@ -126,21 +108,7 @@ class ReservationServiceTest {
         assertTrue(exception.getMessage().contains("Time slot not found"));
     }
 
-    @Test
-    @DisplayName("Should throw exception on concurrent reservation (optimistic lock)")
-    void createReservation_ConcurrentUpdate_ThrowsException() {
-        // Arrange
-        doNothing().when(timeSlotService).validateMethodAndDate(any(), any());
-        when(timeSlotRepository.findByIdWithLock(1L)).thenReturn(Optional.of(availableSlot));
-        when(timeSlotRepository.save(any()))
-                .thenThrow(new ObjectOptimisticLockingFailureException(TimeSlot.class, 1L));
 
-        // Act & Assert
-        assertThrows(
-                SlotAlreadyReservedException.class,
-                () -> reservationService.createReservation(validRequest)
-        );
-    }
 
     @Test
     @DisplayName("Should throw exception when method does not match slot")
@@ -148,7 +116,7 @@ class ReservationServiceTest {
         // Arrange
         validRequest.setMethod(DeliveryMethod.DELIVERY); // Different from slot's DRIVE
         doNothing().when(timeSlotService).validateMethodAndDate(any(), any());
-        when(timeSlotRepository.findByIdWithLock(1L)).thenReturn(Optional.of(availableSlot));
+        when(timeSlotRepository.findById(1L)).thenReturn(Optional.of(availableSlot));
 
         // Act & Assert
         InvalidRequestException exception = assertThrows(

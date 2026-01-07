@@ -1,7 +1,6 @@
 package com.delivery.dto;
 
 import com.delivery.entity.DeliveryMethod;
-import com.delivery.entity.SlotStatus;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,18 +14,16 @@ public class TimeSlotDTO {
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
-    private SlotStatus status;
 
     public TimeSlotDTO() {}
 
     public TimeSlotDTO(Long id, DeliveryMethod method, LocalDate date, 
-                       LocalTime startTime, LocalTime endTime, SlotStatus status) {
+                       LocalTime startTime, LocalTime endTime) {
         this.id = id;
         this.method = method;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.status = status;
     }
 
     // Getters and Setters
@@ -44,7 +41,4 @@ public class TimeSlotDTO {
 
     public LocalTime getEndTime() { return endTime; }
     public void setEndTime(LocalTime endTime) { this.endTime = endTime; }
-
-    public SlotStatus getStatus() { return status; }
-    public void setStatus(SlotStatus status) { this.status = status; }
 }

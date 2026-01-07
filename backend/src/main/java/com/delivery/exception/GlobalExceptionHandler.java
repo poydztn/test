@@ -16,10 +16,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(SlotAlreadyReservedException.class)
-    public ResponseEntity<Map<String, Object>> handleSlotAlreadyReserved(SlotAlreadyReservedException ex) {
-        return buildErrorResponse(HttpStatus.CONFLICT, ex.getMessage());
-    }
+
 
     @ExceptionHandler(InvalidRequestException.class)
     public ResponseEntity<Map<String, Object>> handleInvalidRequest(InvalidRequestException ex) {

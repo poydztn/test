@@ -1,10 +1,9 @@
 package com.delivery.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 /**
- * Represents a customer's reservation for a time slot.
+ * Represents a reservation for a time slot.
  */
 @Entity
 @Table(name = "reservations")
@@ -18,15 +17,11 @@ public class Reservation {
     @JoinColumn(name = "time_slot_id", nullable = false)
     private TimeSlot timeSlot;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
     // Default constructor for JPA
     public Reservation() {}
 
     public Reservation(TimeSlot timeSlot) {
         this.timeSlot = timeSlot;
-        this.createdAt = LocalDateTime.now();
     }
 
     // Getters and Setters
@@ -44,15 +39,5 @@ public class Reservation {
 
     public void setTimeSlot(TimeSlot timeSlot) {
         this.timeSlot = timeSlot;
-    }
-
-
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 }
