@@ -56,8 +56,8 @@ import {
         <h2 class="h4 mb-4">Step 2: Choose Your Time Slot</h2>
         <p class="text-muted mb-3">Selected method: {{ selectedMethod?.name }}</p>
 
-        <!-- Date Picker (for methods that support date selection) -->
-        <div *ngIf="!isAsapMethod()" class="mb-4">
+        <!-- Date Picker (only for DRIVE and DELIVERY methods) -->
+        <div *ngIf="selectedMethod.code === 'DRIVE' || selectedMethod.code === 'DELIVERY'" class="mb-4">
           <div class="row justify-content-center">
             <div class="col-md-6 col-lg-4">
               <label class="form-label fw-semibold">Select Date</label>
