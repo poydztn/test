@@ -35,8 +35,8 @@ public class DeliveryMethodController {
         return switch (method) {
             case DRIVE -> "Drive (Store Pickup)";
             case DELIVERY -> "Standard Delivery";
-            case DELIVERY_TODAY -> "Same-Day Delivery";
-            case DELIVERY_ASAP -> "Express ASAP Delivery";
+            case DELIVERY_TODAY -> "Today Delivery";
+            case DELIVERY_ASAP -> "ASAP Delivery";
         };
     }
 

@@ -77,22 +77,17 @@ import {
           <p class="mt-3 text-muted">Loading available slots...</p>
         </div>
 
-        <div *ngIf="!loadingSlots && timeSlots.length > 0" class="row g-3 justify-content-center">
-          <div *ngFor="let slot of timeSlots" class="col-md-6 col-lg-3">
-            <div class="slot-card" 
-                 [class.selected]="selectedSlot?.id === slot.id"
-                 [class.disabled]="slot.status === 'RESERVED'"
-                 (click)="selectSlot(slot)">
-              <div class="d-flex justify-content-between align-items-center">
-                <div>
-                  <div class="fw-semibold">{{ formatTime(slot.startTime) }} - {{ formatTime(slot.endTime) }}</div>
-                  <div class="text-muted small">{{ formatDate(slot.date) }}</div>
-                </div>
-                <span [class]="slot.status === 'AVAILABLE' ? 'badge-available' : 'badge-reserved'">
-                  {{ slot.status === 'AVAILABLE' ? 'Available' : 'Reserved' }}
-                </span>
-              </div>
-            </div>
+        <div *ngIf="!loadingSlots && timeSlots.length > 0" class="row justify-content-center">
+          <div class="col-md-8 col-lg-6">
+            <ul class="list-group">
+              <li *ngFor="let slot of timeSlots" 
+                  class="list-group-item list-group-item-action"
+                  [class.active]="selectedSlot?.id === slot.id"
+                  (click)="selectSlot(slot)"
+                  style="cursor: pointer;">
+                {{ formatTime(slot.startTime) }} - {{ formatTime(slot.endTime) }} ({{ formatDate(slot.date) }})
+              </li>
+            </ul>
           </div>
         </div>
 
@@ -126,42 +121,14 @@ import {
       <div *ngIf="reservation" class="mb-5">
         <div class="row justify-content-center">
           <div class="col-md-8 col-lg-6">
-            <div class="confirmation-card">
-              <div class="text-center mb-3">
-                <h2 class="h3">Reservation Confirmed!</h2>
-              </div>
-              <p class="text-muted mb-4 text-center">Your delivery slot has been successfully reserved.</p>
-              
-              <div class="bg-light rounded-3 p-4 mb-4 text-start">
-                <div class="row g-3">
-                  <div class="col-6">
-                    <div class="text-muted small">Reservation ID</div>
-                    <div class="fw-semibold">#{{ reservation?.id }}</div>
-                  </div>
-                  <div class="col-6">
-                    <div class="text-muted small">Delivery Method</div>
-                    <div class="fw-semibold">{{ selectedMethod?.name }}</div>
-                  </div>
-                  <div class="col-6">
-                    <div class="text-muted small">Date</div>
-                    <div class="fw-semibold">{{ formatDate(reservation?.date || '') }}</div>
-                  </div>
-                  <div class="col-6">
-                    <div class="text-muted small">Time Slot</div>
-                    <div class="fw-semibold">{{ formatTime(reservation?.startTime || '') }} - {{ formatTime(reservation?.endTime || '') }}</div>
-                  </div>
-                  <div class="col-12">
-                    <div class="text-muted small">Customer ID</div>
-                    <div class="fw-semibold">{{ reservation?.customerId }}</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="text-center">
-                <button class="btn btn-primary-gradient btn-lg" (click)="startOver()">
-                  Make Another Reservation
-                </button>
-              </div>
+            <div class="alert alert-success text-center" role="alert">
+              <h4 class="alert-heading">Reservation Confirmed!</h4>
+              <p class="mb-0">Your delivery slot has been successfully reserved.</p>
+            </div>
+            <div class="text-center mt-3">
+              <button class="btn btn-primary-gradient btn-lg" (click)="startOver()">
+                Make Another Reservation
+              </button>
             </div>
           </div>
         </div>
@@ -278,7 +245,6 @@ export class AppComponent implements OnInit {
   }
 
   selectSlot(slot: TimeSlot): void {
-    if (slot.status === 'RESERVED') return;
     this.selectedSlot = slot;
   }
 
