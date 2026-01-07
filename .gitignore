@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Build outputs
+dist/
+*.jar
+*.war
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Angular
+.angular/
+
+# H2 Database
+*.db
