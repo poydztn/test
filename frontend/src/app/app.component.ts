@@ -15,14 +15,6 @@ import {
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <!-- Header -->
-    <header class="page-header">
-      <div class="container">
-        <h1>Delivery Scheduling</h1>
-        <p>Choose your preferred delivery method and time slot</p>
-      </div>
-    </header>
-
     <main class="container pb-5">
       <!-- Error Alert -->
       <div *ngIf="errorMessage" class="error-alert animate-fade-in-up mb-4">
