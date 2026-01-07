@@ -41,8 +41,8 @@ public class ReservationService {
         // Validate method/date combination
         timeSlotService.validateMethodAndDate(request.getMethod(), request.getDate());
 
-        // Find the time slot
-        TimeSlot slot = timeSlotRepository.findById(request.getSlotId())
+        // Find the time slot with pessimistic lock to prevent concurrent reservations
+        TimeSlot slot = timeSlotRepository.findByIdWithLock(request.getSlotId())
                 .orElseThrow(() -> new InvalidRequestException("Time slot not found: " + request.getSlotId()));
 
         // Verify slot matches request

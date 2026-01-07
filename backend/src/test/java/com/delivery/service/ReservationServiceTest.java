@@ -74,7 +74,7 @@ class ReservationServiceTest {
     void createReservation_ValidRequest_ReturnsReservation() {
         // Arrange
         doNothing().when(timeSlotService).validateMethodAndDate(any(), any());
-        when(timeSlotRepository.findById(1L)).thenReturn(Optional.of(availableSlot));
+        when(timeSlotRepository.findByIdWithLock(1L)).thenReturn(Optional.of(availableSlot));
         when(timeSlotRepository.save(any())).thenReturn(availableSlot);
         when(reservationRepository.save(any())).thenAnswer(invocation -> {
             Reservation r = invocation.getArgument(0);
@@ -102,7 +102,7 @@ class ReservationServiceTest {
         // Arrange
         validRequest.setSlotId(2L);
         doNothing().when(timeSlotService).validateMethodAndDate(any(), any());
-        when(timeSlotRepository.findById(2L)).thenReturn(Optional.of(reservedSlot));
+        when(timeSlotRepository.findByIdWithLock(2L)).thenReturn(Optional.of(reservedSlot));
 
         // Act & Assert
         assertThrows(
@@ -118,7 +118,7 @@ class ReservationServiceTest {
     void createReservation_SlotNotFound_ThrowsException() {
         // Arrange
         doNothing().when(timeSlotService).validateMethodAndDate(any(), any());
-        when(timeSlotRepository.findById(1L)).thenReturn(Optional.empty());
+        when(timeSlotRepository.findByIdWithLock(1L)).thenReturn(Optional.empty());
 
         // Act & Assert
         InvalidRequestException exception = assertThrows(
@@ -133,7 +133,7 @@ class ReservationServiceTest {
     void createReservation_ConcurrentUpdate_ThrowsException() {
         // Arrange
         doNothing().when(timeSlotService).validateMethodAndDate(any(), any());
-        when(timeSlotRepository.findById(1L)).thenReturn(Optional.of(availableSlot));
+        when(timeSlotRepository.findByIdWithLock(1L)).thenReturn(Optional.of(availableSlot));
         when(timeSlotRepository.save(any()))
                 .thenThrow(new ObjectOptimisticLockingFailureException(TimeSlot.class, 1L));
 
@@ -150,7 +150,7 @@ class ReservationServiceTest {
         // Arrange
         validRequest.setMethod(DeliveryMethod.DELIVERY); // Different from slot's DRIVE
         doNothing().when(timeSlotService).validateMethodAndDate(any(), any());
-        when(timeSlotRepository.findById(1L)).thenReturn(Optional.of(availableSlot));
+        when(timeSlotRepository.findByIdWithLock(1L)).thenReturn(Optional.of(availableSlot));
 
         // Act & Assert
         InvalidRequestException exception = assertThrows(
