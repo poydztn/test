@@ -58,10 +58,7 @@ class ReservationServiceTest {
         availableSlot.setId(1L);
 
 
-        validRequest = new ReservationRequest();
-        validRequest.setMethod(DeliveryMethod.DRIVE);
-        validRequest.setDate(today);
-        validRequest.setSlotId(1L);
+        validRequest = new ReservationRequest(DeliveryMethod.DRIVE, today, 1L);
     }
 
     @Test
@@ -81,9 +78,9 @@ class ReservationServiceTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals(100L, result.getId());
-        assertEquals(1L, result.getSlotId());
-        assertEquals(DeliveryMethod.DRIVE, result.getMethod());
+        assertEquals(100L, result.id());
+        assertEquals(1L, result.slotId());
+        assertEquals(DeliveryMethod.DRIVE, result.method());
         
         verify(reservationRepository).save(any());
     }
@@ -111,14 +108,14 @@ class ReservationServiceTest {
     @DisplayName("Should throw exception when method does not match slot")
     void createReservation_MethodMismatch_ThrowsException() {
         // Arrange
-        validRequest.setMethod(DeliveryMethod.DELIVERY); // Different from slot's DRIVE
+        ReservationRequest mismatchRequest = new ReservationRequest(DeliveryMethod.DELIVERY, today, 1L);
         doNothing().when(timeSlotService).validateMethodAndDate(any(), any());
         when(timeSlotRepository.findById(1L)).thenReturn(Optional.of(availableSlot));
 
         // Act & Assert
         InvalidRequestException exception = assertThrows(
                 InvalidRequestException.class,
-                () -> reservationService.createReservation(validRequest)
+                () -> reservationService.createReservation(mismatchRequest)
         );
         assertTrue(exception.getMessage().contains("does not match"));
     }
@@ -135,7 +132,7 @@ class ReservationServiceTest {
         ReservationDTO result = reservationService.getReservation(100L);
 
         // Assert
-        assertEquals(100L, result.getId());
+        assertEquals(100L, result.id());
     }
 
     @Test

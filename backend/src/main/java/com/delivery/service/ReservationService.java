@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service for managing reservations.
- * Handles concurrency via optimistic locking.
  */
 @Service
 public class ReservationService {
@@ -35,15 +34,13 @@ public class ReservationService {
      */
     @Transactional
     public ReservationDTO createReservation(ReservationRequest request) {
-        // Validate method/date combination
-        timeSlotService.validateMethodAndDate(request.getMethod(), request.getDate());
+        timeSlotService.validateMethodAndDate(request.method(), request.date());
 
         // Find the time slot
-        TimeSlot slot = timeSlotRepository.findById(request.getSlotId())
-                .orElseThrow(() -> new InvalidRequestException("Time slot not found: " + request.getSlotId()));
+        TimeSlot slot = timeSlotRepository.findById(request.slotId())
+                .orElseThrow(() -> new InvalidRequestException("Time slot not found: " + request.slotId()));
 
-        // Verify slot matches request
-        if (slot.getMethod() != request.getMethod() || !slot.getDate().equals(request.getDate())) {
+        if (slot.getMethod() != request.method() || !slot.getDate().equals(request.date())) {
             throw new InvalidRequestException("Slot does not match specified method and date");
         }
 

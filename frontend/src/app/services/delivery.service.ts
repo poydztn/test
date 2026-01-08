@@ -3,36 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-
-export type DeliveryMethod = string;
-
-export interface TimeSlot {
-    id: number;
-    method: string;
-    date: string;
-    startTime: string;
-    endTime: string;
-}
-
-export interface ReservationRequest {
-    method: string;
-    date: string;
-    slotId: number;
-}
-
-export interface Reservation {
-    id: number;
-    slotId: number;
-    method: string;
-    date: string;
-    startTime: string;
-    endTime: string;
-}
-
-export interface ApiError {
-    status: number;
-    message: string;
-}
+import { DeliveryMethod, TimeSlot, ReservationRequest, Reservation, ApiError } from '../models/models';
 
 @Injectable({
     providedIn: 'root'

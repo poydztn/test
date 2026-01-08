@@ -1,19 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MethodSelectionComponent } from './components/method-selection/method-selection.component';
+import { TimeSlotSelectionComponent } from './components/time-slot-selection/time-slot-selection.component';
+import { ConfirmationComponent } from './components/confirmation/confirmation.component';
 import {
-  DeliveryService,
+  DeliveryService
+} from './services/delivery.service';
+import {
   DeliveryMethod,
   TimeSlot,
   Reservation,
   ReservationRequest,
   ApiError
-} from './services/delivery.service';
+} from './models/models';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MethodSelectionComponent, TimeSlotSelectionComponent, ConfirmationComponent],
   templateUrl: './app.component.html',
   styles: []
 })
@@ -31,7 +36,6 @@ export class AppComponent implements OnInit {
   // Loading states
   loadingMethods = false;
   loadingSlots = false;
-  reserving = false;
 
   // Error handling
   errorMessage = '';
@@ -61,15 +65,17 @@ export class AppComponent implements OnInit {
     });
   }
 
+  onMethodSelect(method: string | null): void {
+    this.selectedMethod = method;
+    this.onMethodChange();
+  }
+
   onMethodChange(): void {
     if (!this.selectedMethod) return;
 
     // Reset slot selection when method changes
     this.selectedSlot = null;
     this.timeSlots = [];
-
-    // For DELIVERY_TODAY and ASAP, force today's date
-
 
     // Automatically load slots
     this.loadTimeSlots();
@@ -97,75 +103,41 @@ export class AppComponent implements OnInit {
     });
   }
 
-  onDateChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.selectedDate = input.value;
+  onDateSelect(date: string): void {
+    this.selectedDate = date;
     this.loadTimeSlots();
   }
 
-  selectSlot(slot: TimeSlot): void {
-    this.selectedSlot = slot;
-  }
+  onReserveSlot(slot: TimeSlot): void {
+    if (!this.selectedMethod) return;
 
-  makeReservation(): void {
-    if (!this.selectedMethod || !this.selectedSlot) return;
-
-    this.reserving = true;
     this.clearError();
 
     const request: ReservationRequest = {
       method: this.selectedMethod,
       date: this.selectedDate,
-      slotId: this.selectedSlot.id
+      slotId: slot.id
     };
 
     this.deliveryService.createReservation(request).subscribe({
       next: (reservation) => {
         this.reservation = reservation;
-        this.reserving = false;
       },
       error: (err: ApiError) => {
         this.errorMessage = err.message;
-        this.reserving = false;
-        // Reload slots to get updated availability
         this.loadTimeSlots();
       }
     });
   }
-
-
 
   startOver(): void {
     this.selectedMethod = null;
     this.selectedSlot = null;
     this.reservation = null;
     this.timeSlots = [];
-
   }
 
   clearError(): void {
     this.errorMessage = '';
-  }
-
-  isAsapMethod(): boolean {
-    return this.selectedMethod === 'DELIVERY_ASAP';
-  }
-
-
-
-  formatTime(time: string): string {
-    if (!time) return '';
-    const [hours, minutes] = time.split(':');
-    return `${hours}:${minutes}`;
-  }
-
-  formatDate(dateStr: string): string {
-    if (!dateStr) return '';
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric'
-    });
   }
 }

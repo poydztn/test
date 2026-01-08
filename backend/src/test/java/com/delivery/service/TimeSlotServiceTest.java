@@ -58,10 +58,10 @@ class TimeSlotServiceTest {
 
         // Assert
         assertEquals(4, slots.size());
-        assertEquals(LocalTime.of(9, 0), slots.get(0).getStartTime());
-        assertEquals(LocalTime.of(11, 0), slots.get(0).getEndTime());
-        assertEquals(LocalTime.of(16, 0), slots.get(3).getStartTime());
-        assertEquals(LocalTime.of(18, 0), slots.get(3).getEndTime());
+        assertEquals(LocalTime.of(9, 0), slots.get(0).startTime());
+        assertEquals(LocalTime.of(11, 0), slots.get(0).endTime());
+        assertEquals(LocalTime.of(16, 0), slots.get(3).startTime());
+        assertEquals(LocalTime.of(18, 0), slots.get(3).endTime());
 
         verify(timeSlotRepository).saveAll(any());
     }
@@ -95,8 +95,8 @@ class TimeSlotServiceTest {
 
         // Assert
         assertEquals(2, slots.size());
-        assertEquals(LocalTime.of(14, 0), slots.get(0).getStartTime());
-        assertEquals(LocalTime.of(16, 0), slots.get(1).getStartTime());
+        assertEquals(LocalTime.of(14, 0), slots.get(0).startTime());
+        assertEquals(LocalTime.of(16, 0), slots.get(1).startTime());
     }
 
     @Test
